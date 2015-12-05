@@ -1,8 +1,0 @@
-<resources>
-    <string name="app_name">LogCat</string>
-
-    <!-- Main Activity -->
-    <string name="main_title">LogCat</string>
-    <string name="action_clear">Clear Log</string>
-
-</resources>

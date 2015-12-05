@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">LogCat</string>
+
+    <!-- Main Activity -->
+    <string name="main_title">LogCat</string>
+    <string name="action_clear">Clear Log</string>
+
+    <!-- Messages (Toast, Exception) -->
+    <string name="mes_unable_get_log">Unable to get LogCat</string>
+</resources>
