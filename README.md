@@ -1,5 +1,5 @@
 # Android-Clog
-#### Android library to show CatLog messages
+#### Android library to show Logcat messages
 Includes Recycler View's Adapter with ability fetch and filter log's messages by level
 
 #### How to use
