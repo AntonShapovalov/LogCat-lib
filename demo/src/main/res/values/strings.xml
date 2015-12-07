@@ -5,6 +5,16 @@
     <string name="main_title">LogCat</string>
     <string name="action_clear">Clear Log</string>
 
+    <!-- Navigation -->
+    <string name="nav_header">Logcat levels</string>
+    <string name="nav_all">All</string>
+    <string name="nav_verbose">Verbose</string>
+    <string name="nav_debug">Debug</string>
+    <string name="nav_info">Info</string>
+    <string name="nav_warn">Warn</string>
+    <string name="nav_error">Error</string>
+    <string name="nav_assert">Assert</string>
+
     <!-- Messages (Toast, Exception) -->
     <string name="mes_unable_get_log">Unable to get LogCat</string>
 </resources>

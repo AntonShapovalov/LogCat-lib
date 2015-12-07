@@ -16,11 +16,13 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
-public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> implements LogCatAdapter {
+public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> implements LogcatAdapter {
 
     public static final String ERROR_MESSAGE = "Unable to get LogCat";
     public static final String LOG_TAG = "CLOG.LOG_TAG";
     private static final ArrayList<Message> items = new ArrayList<>();
+    // store all items before filtering
+    private static final ArrayList<Message> allItems = new ArrayList<>();
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public final TextView header;
@@ -106,9 +108,10 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapt
      * <p>
      * Each item in List display message header with metadata and first row of raw message,
      * whole message returned in {@link #onClickItem(String logMessage)}
-     * Show Toast {@link #ERROR_MESSAGE} when unable to get messages
+     * If load failed, return FALSE in {@link #onLoadFinished(boolean isLoadSuccess)}
      * </p>
      */
+    @Override
     public void loadItems() {
         new MessagesLoader().execute();
     }
@@ -116,20 +119,24 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapt
     /**
      * Callback method before loadItems, use to show Progress
      */
+    @Override
     public abstract void onLoadStarted();
 
     /**
      * Callback method when loadItems finished, use to hide Progress and show Toast
      *
-     * @param isLoadSuccess
+     * @param isLoadSuccess is true when {@link #loadItems()} was without errors
      */
+    @Override
     public abstract void onLoadFinished(boolean isLoadSuccess);
 
     /**
      * Clear RecyclerView
      */
+    @Override
     public void clearItems() {
         items.clear();
+        allItems.clear();
         notifyDataSetChanged();
     }
 
@@ -138,6 +145,7 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapt
      *
      * @param logMessage is whole LogCat message (-v long message format)
      */
+    @Override
     public abstract void onClickItem(String logMessage);
 
     private final class MessagesLoader extends AsyncTask<Void, Void, Boolean> {
@@ -145,6 +153,7 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapt
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            allItems.clear();
             onLoadStarted();
         }
 
@@ -198,4 +207,37 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapt
         }
     }
 
+    /**
+     * Show only message with certain level
+     *
+     * @param level is constant {@see ru.org.adons.clog.Message.Level}
+     *              <ul>
+     *              <li>VERBOSE</li>
+     *              <li>DEBUG</li>
+     *              <li>INFO</li>
+     *              <li>WARN</li>
+     *              <li>ERROR</li>
+     *              <li>ASSERT</li>
+     *              <ul/>
+     */
+    @Override
+    public void filterByLevel(Message.Level level) {
+        if (allItems.size() == 0) {
+            allItems.addAll(items);
+        }
+        if (level == null) {
+            items.clear();
+            items.addAll(allItems);
+        } else {
+            final ArrayList<Message> newItems = new ArrayList<>();
+            for (Message m : allItems) {
+                if (m.getLevel() == level) {
+                    newItems.add(m);
+                }
+            }
+            items.clear();
+            items.addAll(newItems);
+        }
+        notifyDataSetChanged();
+    }
 }
