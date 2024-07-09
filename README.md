@@ -69,7 +69,7 @@ Includes Recycler View's Adapter with ability fetch and filter log's messages by
         }
     }
 ```
-* ![link](screenshots/list.png)
+![link](screenshots/list.png)
 
 ##### Filtration by Level
 Use `filterByLevel(Message.Level level)` method to show only messages with certain log level. *Message.Level* is one constant from `{VERBOSE, DEBUG, INFO, WARN, ERROR, ASSERT}`
@@ -98,4 +98,4 @@ Use `filterByLevel(Message.Level level)` method to show only messages with certa
         adapter.filterByLevel(level);
     }
 ```
-* ![link](screenshots/filter.png)
+![link](screenshots/filter.png)
